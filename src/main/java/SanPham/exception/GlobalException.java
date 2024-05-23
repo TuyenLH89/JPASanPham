@@ -19,4 +19,17 @@ public class GlobalException {
         apiResponse.setMessage(errorCode.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    ResponseEntity<ApiResponse> handlingIllegalArgumentException(IllegalArgumentException exception){
+        String enumKey = exception.getMessage();
+        ErrorCode errorCode = ErrorCode.KEY_ERROR_NOT_EXIST;
+        if (enumKey.equals("Page index must not be less than zero"))
+            errorCode = ErrorCode.PAGEINDEX_INVALID;
+        else if (enumKey.equals("Page size must not be less than one"))
+            errorCode = ErrorCode.PAGESIZE_INVALID;
+        ApiResponse apiResponse = new ApiResponse<>();
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+        return ResponseEntity.badRequest().body(apiResponse);
+    }
 }
